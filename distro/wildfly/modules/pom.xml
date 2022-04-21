@@ -80,7 +80,12 @@
     <!-- script engine dependencies -->
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
+      <artifactId>groovy</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-jsr223</artifactId>
     </dependency>
     
     <dependency>
@@ -243,6 +248,10 @@
                 </replace>
 
                 <replace dir="target/modules" token="@version.freemarker@" value="${version.freemarker}">
+                  <include name="**/module.xml" />
+                </replace>
+
+                <replace dir="target/modules" token="@version.groovy@" value="${version.groovy}">
                   <include name="**/module.xml" />
                 </replace>
 

@@ -1,0 +1,12 @@
+<module xmlns="urn:jboss:module:1.0" name="org.codehaus.groovy.groovy-jsr223">
+  <resources>
+    <resource-root path="groovy-jsr223-@version.groovy@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="javax.api" />
+    <module name="sun.jdk" />
+    <module name="org.camunda.spin.camunda-spin-core" />
+    <module name="org.codehaus.groovy.groovy" services="export" export="true" />
+  </dependencies>
+</module>
