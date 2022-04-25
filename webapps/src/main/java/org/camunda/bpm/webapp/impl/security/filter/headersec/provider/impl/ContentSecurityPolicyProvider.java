@@ -18,15 +18,23 @@ package org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl;
 
 import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
 
+import javax.servlet.ServletContext;
 import java.util.Map;
+import java.util.UUID;
 
 public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
 
   public static final String HEADER_NAME = "Content-Security-Policy";
-  public static final String HEADER_DEFAULT_VALUE = "base-uri 'self'";
+  public static final String HEADER_DEFAULT_VALUE = ""
+    + "script-src $NONCE 'strict-dynamic' unsafe-eval https: 'self';"
+    + "style-src 'unsafe-inline' https: 'self';" // TODO remove unsafe
+    + "object-src 'none';"
+    + "base-uri 'none';"
+    + "default-src 'self';";
 
   public static final String DISABLED_PARAM = "contentSecurityPolicyDisabled";
   public static final String VALUE_PARAM = "contentSecurityPolicyValue";
+  public static final String ATTR_CSP_FILTER_NONCE = "org.camunda.bpm.csp.nonce";
 
   @Override
   public Map<String, String> initParams() {
@@ -70,4 +78,10 @@ public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
     return HEADER_NAME;
   }
 
+  @Override
+  public String getHeaderValue(final ServletContext servletContext) {
+    final String nonce = UUID.randomUUID().toString().substring(0, 8);
+    servletContext.setAttribute(ATTR_CSP_FILTER_NONCE, nonce);
+    return HEADER_DEFAULT_VALUE.replaceAll("\\$NONCE", String.format("'nonce-%s'", nonce));
+  }
 }
